@@ -1,4 +1,17 @@
-# React + TypeScript + Vite
+# Sloppy website
+
+## Deployment
+
+Сайт публикуется автоматически через GitHub Actions workflow [`deploy.yml`](./.github/workflows/deploy.yml).
+После пуша в `main` action:
+
+- устанавливает зависимости через `npm ci`
+- собирает сайт через `npm run build`
+- публикует содержимое `dist/` в GitHub Pages
+
+Чтобы это работало, в настройках репозитория GitHub Pages должен быть выбран источник `GitHub Actions`.
+
+## Local development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
