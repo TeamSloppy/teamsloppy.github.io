@@ -1,27 +1,28 @@
 import { useEffect } from 'react'
 import './App.css'
 import { NotFoundPage } from './components/NotFoundPage'
-import { HeroDashboardPreview } from './components/HeroDashboardPreview'
+import { LandingSection } from './components/landing/LandingSection'
+import { landingSections } from './components/landing/landingContent'
+import { LandingScene } from './components/landing/LandingScenes'
 
 const soLogo = '/so_logo.svg'
 
 function App() {
-  // Simple intersection observer for scroll animations
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('animate-fade-up')
+            entry.target.classList.add('is-visible')
             observer.unobserve(entry.target)
           }
         })
       },
-      { threshold: 0.1 }
+      { threshold: 0.12, rootMargin: '0px 0px -10% 0px' }
     )
 
-    document.querySelectorAll('.scroll-animate').forEach((el) => {
-      observer.observe(el)
+    document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((node) => {
+      observer.observe(node)
     })
 
     return () => observer.disconnect()
@@ -33,98 +34,226 @@ function App() {
   }
 
   return (
-    <div className="app-wrapper">
-      <div className="glow-bg"></div>
+    <div className="app-shell">
+      <div className="landing-noise" />
+      <div className="landing-radial landing-radial--top" />
+      <div className="landing-radial landing-radial--bottom" />
 
-      {/* Navigation (Toolbar) */}
-      <nav className="navbar glass-nav">
-        <div className="container nav-container">
-          <div className="nav-logo">
-            <img src={soLogo} alt="Sloppy Logo" className="logo-icon" />
-            <span className="logo-text">Sloppy</span>
+      <nav className="site-nav">
+        <div className="container site-nav__inner">
+          <a href="#top" className="site-nav__brand" aria-label="Sloppy homepage">
+            <img src={soLogo} alt="" className="site-nav__logo" />
+            <span>Sloppy</span>
+          </a>
+
+          <div className="site-nav__links">
+            <a href="#runtime">Product</a>
+            <a href="#review">Review</a>
+            <a href="https://docs.sloppy.team/" target="_blank" rel="noreferrer">
+              Docs
+            </a>
+            <a href="https://github.com/TeamSloppy/Sloppy" target="_blank" rel="noreferrer">
+              GitHub
+            </a>
           </div>
-          <div className="nav-links">
-            <a href="#features" className="nav-link">[ Features ↗ ]</a>
-            <a href="#docs" className="nav-link">[ Docs ↗ ]</a>
-            <a href="https://github.com/TeamSloppy/Sloppy" target="_blank" rel="noreferrer" className="nav-link">[ GitHub ↗ ]</a>
-          </div>
-          <div className="nav-actions">
-            <button className="btn btn-primary hover-levitate">[ Initialize ]</button>
-          </div>
+
+          <a
+            href="https://docs.sloppy.team/install"
+            target="_blank"
+            rel="noreferrer"
+            className="button button--primary"
+          >
+            Initialize
+          </a>
         </div>
       </nav>
 
-      {/* Hero Section */}
-      <main>
-        <section className="hero container">
-          <div className="hero-content" style={{ position: 'relative' }}>
-            <div className="hud-element" style={{ position: 'absolute', top: '-40px', left: '-20px', color: 'var(--accent-cyan)', fontSize: '0.75rem', opacity: 0.8 }}>LOC: 45.92.11.0 // STATUS: ONLINE</div>
-            <div className="hud-element" style={{ position: 'absolute', top: '20px', right: '-40px', color: 'var(--accent-pink)', fontSize: '0.75rem', opacity: 0.8, writingMode: 'vertical-rl' }}>PWR_LEVEL: 98%</div>
+      <main id="top">
+        <section className="hero">
+          <div className="container hero__grid">
+            <div className="hero__copy" data-reveal>
+              <div className="eyebrow">Operator-visible AI work</div>
+              <h1>
+                The control plane for
+                <span> observable agent operations.</span>
+              </h1>
+              <p className="hero__lede">
+                Sloppy combines runtime orchestration, project workflows, code review, channel
+                routing, and configurable agents into one inspectable system. Operators can see
+                what happened, why it happened, and what ships next.
+              </p>
 
-            <div className="badge animate-fade-up">[ SYS.UPDATE // SLOPPY ECOSYSTEM V0.1.0 ]</div>
-            <h1 className="hero-title animate-fade-up delay-100">
-              <span className="text-gradient">Agentic Ecosystem</span><br />
-              [ FOR_MODERN_TEAMS ]
-            </h1>
-            <p className="hero-description animate-fade-up delay-200">
-              Deploy, monitor, and execute auto-routines in real-time.
-              Root terminal access to your autonomous workflows.
-            </p>
-            <div className="hero-cta animate-fade-up delay-300">
-              <button className="btn btn-primary btn-large hover-levitate">[ DEPLOY_AGENTS ]</button>
-              <button className="btn btn-secondary btn-large hover-levitate">[ READ_DOCS ]</button>
+              <div className="hero__proofs">
+                <div className="hero-proof">
+                  <strong>Channel → Branch → Worker</strong>
+                  <span>Deterministic routing instead of an opaque prompt loop.</span>
+                </div>
+                <div className="hero-proof">
+                  <strong>Dashboard-first visibility</strong>
+                  <span>Channels, workers, bulletins, review state, and runtime traces.</span>
+                </div>
+                <div className="hero-proof">
+                  <strong>React-driven product demos</strong>
+                  <span>Every section below maps to a real workflow already present in Sloppy.</span>
+                </div>
+              </div>
+
+              <div className="hero__actions">
+                <a
+                  href="https://docs.sloppy.team/install"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button button--primary button--large"
+                >
+                  Get started
+                </a>
+                <a
+                  href="https://docs.sloppy.team/"
+                  target="_blank"
+                  rel="noreferrer"
+                  className="button button--ghost button--large"
+                >
+                  Read docs
+                </a>
+              </div>
+
+              <div className="hero__meta">
+                <span>Swift runtime</span>
+                <span>React dashboard</span>
+                <span>Projects + review</span>
+                <span>Telegram / Discord</span>
+              </div>
             </div>
-          </div>
 
-          {/* Mockup / Dashboard Preview */}
-          <div className="hero-image-wrapper animate-fade-up delay-300">
-            <HeroDashboardPreview />
+            <div className="hero__scene" data-reveal>
+              <LandingScene variant="hero" />
+            </div>
           </div>
         </section>
 
-        {/* Features Section */}
-        <section id="features" className="features container" style={{ position: 'relative' }}>
-          <div className="hud-element" style={{ position: 'absolute', bottom: '0', left: '20px', color: 'var(--text-secondary)', fontSize: '0.75rem', opacity: 0.5 }}>&gt;&gt; DB_CONN: OK // LATENCY: 12ms</div>
-          <div className="section-header scroll-animate">
-            <h2 className="section-title">++ CORE_MODULES</h2>
-            <p className="section-subtitle">OVERRIDE DEFAULT PROTOCOLS WITH BUILT-IN TOOLS</p>
+        <section className="intro-strip">
+          <div className="container intro-strip__inner" data-reveal>
+            <p>
+              A guided walkthrough of the six workflows that make Sloppy feel like a real control
+              plane instead of a chat wrapper.
+            </p>
+            <div className="intro-strip__metrics">
+              <span>6 product sections</span>
+              <span>Dashboard-derived UI</span>
+              <span>Mock data + purposeful motion</span>
+            </div>
           </div>
+        </section>
 
-          <div className="features-grid">
-            {[
-              { title: "SYS.MONITOR", desc: "Real-time telemetry of agent execution streams.", icon: "monitoring" },
-              { title: "Project Management", desc: "Organize workflows, track progress, and ship faster.", icon: "folder" },
-              { title: "Log Analysis", desc: "Deep dive into execution logs with advanced filtering.", icon: "description" },
-              { title: "Agent Configuration", desc: "Tweak parameters and system prompts on the fly.", icon: "settings" },
-              { title: "Instant Deployment", desc: "Push your agents to production with a single click.", icon: "rocket_launch" },
-              { title: "Secure by Design", desc: "Enterprise-grade security and access controls built-in.", icon: "shield" }
-            ].map((feature, i) => (
-              <div key={i} className="feature-card glass hover-levitate scroll-animate" style={{ animationDelay: `${(i % 3) * 100}ms` }}>
-                <div className="feature-icon-wrapper">
-                  <span className="material-symbols-rounded">{feature.icon}</span>
-                </div>
-                <h3 className="feature-title" style={{ textTransform: 'uppercase' }}>&gt; {feature.title}</h3>
-                <p className="feature-desc">{feature.desc}</p>
-                <div style={{ marginTop: 'auto', paddingTop: '16px', fontSize: '0.7rem', color: 'var(--text-secondary)' }}>// ID_{i}</div>
+        {landingSections.map((section, index) => (
+          <LandingSection
+            key={section.id}
+            section={section}
+            align={index % 2 === 0 ? 'left' : 'right'}
+          />
+        ))}
+
+        <section className="infra-section">
+          <div className="container infra-section__inner" data-reveal>
+            <div className="infra-section__copy">
+              <div className="eyebrow">Swift-first runtime</div>
+              <h2>Built in Swift, for operator-visible systems that need to hold up.</h2>
+              <p>
+                Sloppy is not a browser toy wrapped around prompts. The orchestration layer,
+                persistence, transport, and runtime actors live in a Swift-first core designed for
+                long-running workflows, predictable behavior, and local-first operation.
+              </p>
+              <p>
+                When channels spawn branches, workers emit artifacts, and operators need a stable
+                control plane, infrastructure matters. Swift gives Sloppy strong typing, explicit
+                concurrency, one cohesive runtime, and a path to serious systems work without
+                turning the product into a pile of services.
+              </p>
+
+              <div className="infra-section__chips">
+                {[
+                  ['SW', 'Swift 6'],
+                  ['SC', 'Swift Concurrency'],
+                  ['NI', 'SwiftNIO'],
+                  ['SQ', 'SQLite'],
+                  ['AL', 'AnyLanguageModel'],
+                  ['UI', 'React + Vite'],
+                  ['SP', 'SwiftPM'],
+                  ['DK', 'Docker']
+                ].map(([short, label]) => (
+                  <div key={label} className="infra-chip">
+                    <span>{short}</span>
+                    <strong>{label}</strong>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="infra-section__visual" aria-hidden="true">
+              <div className="infra-orb">
+                <div className="infra-orb__core">
+                  <img src="/swift.svg" alt="Swift" className="infra-orb__icon" />
+                </div>
+                <div className="infra-orb__ring infra-orb__ring--1" />
+                <div className="infra-orb__ring infra-orb__ring--2" />
+                <div className="infra-orb__ring infra-orb__ring--3" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="cta-panel">
+          <div className="container cta-panel__inner" data-reveal>
+            <div>
+              <div className="eyebrow">Runtime, workflow, visibility</div>
+              <h2>Run agents in a system your team can actually operate.</h2>
+              <p>
+                Start with the local runtime, wire up a model provider, and use the dashboard to
+                move from experiments to repeatable operator-visible workflows.
+              </p>
+            </div>
+
+            <div className="cta-panel__actions">
+              <a
+                href="https://docs.sloppy.team/install"
+                target="_blank"
+                rel="noreferrer"
+                className="button button--primary button--large"
+              >
+                Install Sloppy
+              </a>
+              <a
+                href="https://github.com/TeamSloppy/Sloppy"
+                target="_blank"
+                rel="noreferrer"
+                className="button button--ghost button--large"
+              >
+                View GitHub
+              </a>
+            </div>
           </div>
         </section>
       </main>
 
-      {/* Footer */}
-      <footer className="footer container">
-        <div className="footer-content">
-          <div className="footer-brand">
-            <div className="nav-logo">
-              <img src={soLogo} alt="Sloppy Logo" className="logo-icon" />
-              <span className="logo-text">Sloppy</span>
+      <footer className="site-footer">
+        <div className="container site-footer__inner">
+          <div className="site-footer__brand">
+            <img src={soLogo} alt="" className="site-nav__logo" />
+            <div>
+              <strong>Sloppy</strong>
+              <p>Observable control plane for operator-visible AI work.</p>
             </div>
-            <p className="footer-text">© {new Date().getFullYear()} Team Sloppy. All rights reserved.</p>
           </div>
-          <div className="footer-links">
-            <a href="#">Privacy Policy</a>
-            <a href="#">Terms of Service</a>
+
+          <div className="site-footer__links">
+            <a href="#runtime">Product</a>
+            <a href="#review">Review</a>
+            <a href="https://docs.sloppy.team/" target="_blank" rel="noreferrer">
+              Docs
+            </a>
+            <a href="https://github.com/TeamSloppy/Sloppy" target="_blank" rel="noreferrer">
+              GitHub
+            </a>
           </div>
         </div>
       </footer>
