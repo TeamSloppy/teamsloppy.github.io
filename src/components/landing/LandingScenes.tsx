@@ -506,62 +506,120 @@ function ReviewScene() {
 
 function ChannelsScene() {
   return (
-    <DashboardFrame title="Channel Bridge" status="telegram + discord live" kicker="entry points stay coherent">
-      <div className="scene-grid scene-grid--channels">
-        <section className="scene-panel">
-          <div className="scene-panel__head">
-            <span>Inbound channels</span>
-            <span className="badge">3 connected</span>
-          </div>
-          <div className="inbox-list">
-            {[
-              { name: 'Telegram / Support Ops', state: 'allowed' },
-              { name: 'Discord / Dev Infra', state: 'allowed' },
-              { name: 'Telegram / External QA', state: 'pending approval' }
-            ].map((item, index) => (
-              <div key={item.name} className="inbox-row">
-                <span className={`badge ${index < 2 ? 'badge--success' : ''}`}>{item.state}</span>
-                <strong>{item.name}</strong>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section className="scene-panel scene-panel--fill">
-          <div className="scene-panel__head">
-            <span>Routed conversation</span>
-            <span className="badge badge--accent">ops-bridge</span>
-          </div>
-          <div className="chat-thread chat-thread--tall">
-            <div className="chat-bubble">Telegram user: Search rollout is failing for demo traffic.</div>
-            <div className="chat-bubble chat-bubble--assistant">
-              Sloppy: Routed into branch review workflow and created a project task.
-            </div>
-            <div className="chat-bubble chat-bubble--assistant">
-              Sloppy: Waiting on operator review before posting the remediation note back to the channel.
+    <DashboardFrame title="Channel Bridge" status="telegram + discord live" kicker="entry points stay coherent" hideHead>
+      <section className="cs-scene">
+        <div className="cs-hero">
+          <div className="cs-titlebar">
+            <div className="cs-avatar">SO</div>
+            <div className="cs-copy">
+              <strong>support:ops-bridge</strong>
+              <span>channel-tg-support-28a · Project Alpha</span>
             </div>
           </div>
-        </section>
+          <div className="cs-badges">
+            <span className="cs-badge">open</span>
+            <span className="cs-badge">6 messages</span>
+            <span className="cs-badge">Updated 2m ago</span>
+          </div>
+        </div>
 
-        <section className="scene-panel">
-          <div className="scene-panel__head">
-            <span>Approvals + handoffs</span>
-            <span className="badge">guardrails</span>
-          </div>
-          <div className="approval-stack">
-            {[
-              'verification code requested for new QA user',
-              'approved channel user synced to policy store',
-              'handoff sent to review:alpha with linked task'
-            ].map((item) => (
-              <div key={item} className="approval-row">
-                <span className="ticker-item__pulse" />
-                <span>{item}</span>
+        <div className="cs-layout">
+          <div className="cs-chat">
+            <div className="cs-msg cs-msg--user">
+              <div className="cs-msg-head">
+                <strong>telegram:user</strong>
+                <span>10:41:12</span>
               </div>
-            ))}
+              <p>Search rollout is failing for demo traffic. Production indexer returns 404 on the new endpoint.</p>
+            </div>
+
+            <div className="cs-msg cs-msg--assistant">
+              <div className="cs-msg-head">
+                <strong>assistant</strong>
+                <span>10:41:14</span>
+              </div>
+              <p>Routing your report into the review workflow. Created task in Project Alpha and assigned to Happy Path agent.</p>
+              <div className="cs-msg-list">
+                <span>→ Created task <strong>#131</strong>: "Investigate search indexer 404"</span>
+                <span>→ Linked to <strong>review:alpha</strong> channel</span>
+                <span>→ Notified assigned agent</span>
+              </div>
+            </div>
+
+            <div className="cs-event">
+              <span className="material-symbols-rounded">route</span>
+              <div className="cs-event-body">
+                <strong>Route: delegate_to_agent</strong>
+                <span>Confidence: 0.94 · Task: #131 · Branch: review-search</span>
+              </div>
+              <span className="cs-event-time">10:41:15</span>
+            </div>
+
+            <div className="cs-msg cs-msg--user">
+              <div className="cs-msg-head">
+                <strong>telegram:user</strong>
+                <span>10:42:03</span>
+              </div>
+              <p>Can you check the provider failover too? We had timeouts last night.</p>
+            </div>
+
+            <div className="cs-msg cs-msg--assistant">
+              <div className="cs-msg-head">
+                <strong>assistant</strong>
+                <span>10:42:06</span>
+              </div>
+              <p>Checking provider health. Failover logs show 3 timeout events between 02:00–04:00 UTC. Opened a separate task for investigation.</p>
+              <p>Task <strong>#144</strong>: "Patch provider failover" — assigned to Dispatcher.</p>
+            </div>
+
+            <div className="cs-event">
+              <span className="material-symbols-rounded">call_split</span>
+              <div className="cs-event-body">
+                <strong>Branch spawned</strong>
+                <span>Investigate timeout pattern in provider failover logs</span>
+              </div>
+              <span className="cs-event-time">10:42:08</span>
+            </div>
+
+            <div className="cs-msg cs-msg--assistant">
+              <div className="cs-msg-head">
+                <strong>assistant</strong>
+                <span>10:43:22</span>
+              </div>
+              <p>Provider failover patch is ready for review. Timeout was caused by stale DNS cache in secondary provider. Fix deployed to staging.</p>
+            </div>
           </div>
-        </section>
-      </div>
+
+          <aside className="cs-sidebar">
+            <div className="cs-panel">
+              <div className="cs-panel-head">
+                <span className="material-symbols-rounded">info</span>
+                <span>Session</span>
+              </div>
+              <dl className="cs-meta">
+                <div><dt>Channel</dt><dd>tg-support-28a</dd></div>
+                <div><dt>Status</dt><dd>open</dd></div>
+                <div><dt>Messages</dt><dd>6</dd></div>
+                <div><dt>Project</dt><dd>Alpha</dd></div>
+                <div><dt>Agent</dt><dd>Happy Path</dd></div>
+              </dl>
+            </div>
+            <div className="cs-panel">
+              <div className="cs-panel-head">
+                <span className="material-symbols-rounded">token</span>
+                <span>Context</span>
+              </div>
+              <dl className="cs-meta">
+                <div><dt>Model</dt><dd>gpt-4o</dd></div>
+                <div><dt>Tokens</dt><dd>12.4K / 128K</dd></div>
+              </dl>
+              <div className="cs-usage-bar">
+                <div className="cs-usage-fill" style={{ width: '9.7%' }} />
+              </div>
+            </div>
+          </aside>
+        </div>
+      </section>
     </DashboardFrame>
   )
 }
