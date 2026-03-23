@@ -3,7 +3,7 @@ import './App.css'
 import { NotFoundPage } from './components/NotFoundPage'
 import { LandingSection } from './components/landing/LandingSection'
 import { landingSections } from './components/landing/landingContent'
-import { LandingScene } from './components/landing/LandingScenes'
+import { HeroDashboardPreview } from './components/HeroDashboardPreview'
 
 const soLogo = '/so_logo.svg'
 
@@ -126,7 +126,7 @@ function App() {
             </div>
 
             <div className="hero__scene" data-reveal>
-              <LandingScene variant="hero" />
+              <HeroDashboardPreview />
             </div>
           </div>
         </section>

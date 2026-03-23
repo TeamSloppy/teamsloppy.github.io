@@ -21,13 +21,15 @@ function DashboardFrame({
   status,
   kicker,
   children,
-  className = ''
+  className = '',
+  hideHead = false
 }: {
   title: string
   status: string
   kicker?: string
   children: ReactNode
   className?: string
+  hideHead?: boolean
 }) {
   return (
     <div className={`scene-window ${className}`.trim()}>
@@ -46,21 +48,28 @@ function DashboardFrame({
 
       <div className="scene-shell">
         <aside className="scene-rail">
-          {['monitoring', 'forum', 'folder', 'smart_toy', 'schedule', 'settings'].map((icon, index) => (
-            <div key={icon} className={`scene-rail__item${index === 0 ? ' is-active' : ''}`}>
-              <span className="material-symbols-rounded">{icon}</span>
-            </div>
-          ))}
+          <div className="scene-rail__logo">
+            <img src={soLogo} alt="Sloppy" className="scene-rail__logo-image" />
+          </div>
+          <div className="scene-rail__nav">
+            {['dashboard', 'folder', 'monitoring', 'groups', 'settings', 'description'].map((icon, index) => (
+              <div key={icon} className={`scene-rail__item${index === 0 ? ' is-active' : ''}`}>
+                <span className="material-symbols-rounded">{icon}</span>
+              </div>
+            ))}
+          </div>
         </aside>
 
         <div className="scene-main">
-          <div className="scene-main__head">
-            <div>
-              <p className="scene-main__eyebrow">Runtime view</p>
-              <h3>{title}</h3>
+          {!hideHead && (
+            <div className="scene-main__head">
+              <div>
+                <p className="scene-main__eyebrow">Runtime view</p>
+                <h3>{title}</h3>
+              </div>
+              {kicker ? <span className="scene-kicker">{kicker}</span> : null}
             </div>
-            {kicker ? <span className="scene-kicker">{kicker}</span> : null}
-          </div>
+          )}
           {children}
         </div>
       </div>
@@ -133,33 +142,34 @@ function HeroScene() {
 
 function RuntimeScene() {
   return (
-    <DashboardFrame title="Routing Board" status="[>_ SECURE_SESSION_ACTIVE // PID: 9284]" kicker="actors + links">
+    <DashboardFrame title="Routing Board" status="[>_ SECURE_SESSION_ACTIVE // PID: 9284]" hideHead>
       <section className="routing-board-scene">
-        <aside className="routing-board-scene__toolbar">
-          {['overview', 'dashboard', 'folder_open', 'speed', 'group', 'description'].map((icon, index) => (
-            <div key={icon} className={`routing-board-scene__tool${index === 4 ? ' is-active' : ''}`}>
-              <span className="material-symbols-rounded">{icon}</span>
-            </div>
-          ))}
-        </aside>
-
         <div className="routing-board-scene__canvas">
           <div className="routing-board-scene__grid" />
 
+          <div
+            className="routing-team-group"
+            style={{ left: '48%', top: '2%', width: '44%', height: '70%' }}
+          >
+            <span className="routing-team-label">
+              <span className="routing-team-dot" />
+              Core Team
+            </span>
+          </div>
+
           <svg className="routing-board-links" viewBox="0 0 1000 640" preserveAspectRatio="none" aria-hidden="true">
-            <path d="M 356 314 C 430 314, 472 286, 530 280" className="routing-link routing-link--peer" />
-            <path d="M 530 280 C 602 280, 652 280, 724 280" className="routing-link-flow routing-link-flow--peer" />
-            <path d="M 724 320 C 724 380, 724 420, 724 470" className="routing-link routing-link--hierarchical" />
-            <path d="M 724 320 C 724 380, 724 420, 724 470" className="routing-link-flow routing-link-flow--hierarchical" />
-            <text x="507" y="300" className="routing-link-label">
-              chat
-            </text>
-            <text x="719" y="388" className="routing-link-label">
-              chat
-            </text>
+            <path d="M 350 280 C 420 280, 460 250, 540 250" className="routing-link routing-link--peer" />
+            <path d="M 350 280 C 420 280, 460 250, 540 250" className="routing-link-flow routing-link-flow--peer" />
+            <path d="M 630 140 C 630 175, 630 185, 630 220" className="routing-link routing-link--hierarchical" />
+            <path d="M 630 140 C 630 175, 630 185, 630 220" className="routing-link-flow routing-link-flow--hierarchical" />
+            <path d="M 630 310 C 630 350, 630 380, 630 420" className="routing-link routing-link--hierarchical" />
+            <path d="M 630 310 C 630 350, 630 380, 630 420" className="routing-link-flow routing-link-flow--hierarchical" />
+            <text x="445" y="252" className="routing-link-label">chat</text>
+            <text x="650" y="178" className="routing-link-label">task</text>
+            <text x="650" y="365" className="routing-link-label">chat</text>
           </svg>
 
-          <div className="routing-node routing-node--dispatcher" style={{ left: '22%', top: '39%' }}>
+          <div className="routing-node routing-node--human" style={{ left: '17%', top: '34%' }}>
             <span className="routing-node__socket routing-node__socket--top" />
             <span className="routing-node__socket routing-node__socket--right" />
             <span className="routing-node__socket routing-node__socket--bottom" />
@@ -169,7 +179,7 @@ function RuntimeScene() {
             <small>HUMAN</small>
           </div>
 
-          <div className="routing-node routing-node--happy" style={{ left: '59%', top: '12%' }}>
+          <div className="routing-node routing-node--agent" style={{ left: '54%', top: '8%' }}>
             <span className="routing-node__socket routing-node__socket--top" />
             <span className="routing-node__socket routing-node__socket--right" />
             <span className="routing-node__socket routing-node__socket--bottom" />
@@ -179,18 +189,18 @@ function RuntimeScene() {
             <small>AGENT</small>
           </div>
 
-          <div className="routing-node routing-node--admin" style={{ left: '61%', top: '36%' }}>
+          <div className="routing-node routing-node--human is-selected" style={{ left: '54%', top: '33%' }}>
             <span className="routing-node__socket routing-node__socket--top" />
             <span className="routing-node__socket routing-node__socket--right" />
             <span className="routing-node__socket routing-node__socket--bottom" />
-            <span className="routing-node__socket routing-node__socket--left routing-node__socket--source" />
+            <span className="routing-node__socket routing-node__socket--left" />
             <strong>Admin</strong>
             <span>human:admin</span>
             <small>HUMAN</small>
           </div>
 
-          <div className="routing-node routing-node--ceo" style={{ left: '61%', top: '62%' }}>
-            <span className="routing-node__socket routing-node__socket--top routing-node__socket--source" />
+          <div className="routing-node routing-node--agent" style={{ left: '54%', top: '62%' }}>
+            <span className="routing-node__socket routing-node__socket--top" />
             <span className="routing-node__socket routing-node__socket--right" />
             <span className="routing-node__socket routing-node__socket--bottom" />
             <span className="routing-node__socket routing-node__socket--left" />
@@ -209,8 +219,7 @@ function RuntimeScene() {
         </div>
 
         <div className="routing-board-scene__footer">
-          <span>Loaded 5 actors</span>
-          <span>UPLINK: ESTABLISHED / LATENCY: 12MS</span>
+          Loaded 4 actors
         </div>
       </section>
     </DashboardFrame>
@@ -287,67 +296,131 @@ function DashboardScene() {
   )
 }
 
+const projectColumns: {
+  id: string
+  title: string
+  tasks: { id: string; title: string; priority: string; desc?: string; agent?: string; assignee?: string }[]
+}[] = [
+  {
+    id: 'backlog',
+    title: 'Backlog',
+    tasks: [
+      { id: '142', title: 'Audit support channel logs', priority: 'low' },
+      { id: '156', title: 'Configure artifact retention', desc: 'Set TTL policies for workspace artifacts', priority: 'medium' },
+      { id: '161', title: 'Update onboarding flow', priority: 'low' }
+    ]
+  },
+  {
+    id: 'in_progress',
+    title: 'In Progress',
+    tasks: [
+      { id: '131', title: 'Implement search indexer', desc: 'Full-text search with tokenizers', priority: 'high', agent: 'Happy Path' },
+      { id: '144', title: 'Patch provider failover', priority: 'medium', assignee: 'Dispatcher' }
+    ]
+  },
+  {
+    id: 'needs_review',
+    title: 'Needs Review',
+    tasks: [
+      { id: '127', title: 'Review API rate limiting', desc: 'Rate limiter for project endpoints', priority: 'medium', assignee: 'Admin' }
+    ]
+  },
+  {
+    id: 'done',
+    title: 'Done',
+    tasks: [
+      { id: '119', title: 'Setup CI/CD pipeline', priority: 'low', agent: 'CEO' },
+      { id: '122', title: 'Deploy monitoring stack', priority: 'medium' }
+    ]
+  }
+]
+
 function ProjectsScene() {
   return (
     <DashboardFrame title="Project Operations" status="3 projects active" kicker="tasks + channels + artifacts">
-      <div className="scene-grid scene-grid--projects">
-        <section className="scene-panel scene-panel--span-2">
-          <div className="scene-panel__head">
-            <span>Project Alpha</span>
-            <span className="badge">release prep</span>
+      <section className="ps-scene">
+        <div className="ps-head">
+          <div className="ps-summary">
+            <span className="ps-pill">
+              <span className="material-symbols-rounded">list_alt</span>
+              9 tasks
+            </span>
+            <span className="ps-pill">
+              <span className="material-symbols-rounded">pending_actions</span>
+              2 in progress
+            </span>
           </div>
-          <div className="kanban-board">
-            {[
-              { title: 'Queued', cards: ['Audit support logs', 'Verify provider failover'] },
-              { title: 'In progress', cards: ['Patch search config', 'Collect artifact bundle'] },
-              { title: 'Needs review', cards: ['Review release diff'] }
-            ].map((column) => (
-              <div key={column.title} className="kanban-column">
-                <div className="kanban-column__head">{column.title}</div>
-                {column.cards.map((card) => (
-                  <article key={card} className="kanban-card">
-                    {card}
+          <span className="ps-create-btn">Create Task</span>
+        </div>
+
+        <div className="ps-board">
+          {projectColumns.map((col) => (
+            <div key={col.id} className="ps-col">
+              <div className={`ps-col-head ps-col-head--${col.id}`}>
+                <span>{col.title}</span>
+                <strong>{col.tasks.length}</strong>
+              </div>
+              <div className="ps-col-body">
+                {col.tasks.map((task) => (
+                  <article key={task.id} className="ps-card">
+                    <div className="ps-card-top">
+                      <span className="ps-task-id">#{task.id}</span>
+                    </div>
+                    <h5>{task.title}</h5>
+                    {task.desc && <p>{task.desc}</p>}
+                    <div className="ps-card-meta">
+                      <span className={`ps-priority ps-priority--${task.priority}`}>
+                        <span className="material-symbols-rounded">flag</span>
+                        {task.priority === 'high' ? 'High' : task.priority === 'medium' ? 'Medium' : 'Low'}
+                      </span>
+                      {(task.agent || task.assignee) && (
+                        <span className={`ps-assignee${task.agent ? ' ps-assignee--agent' : ''}`}>
+                          <span className="material-symbols-rounded">{task.agent ? 'smart_toy' : 'person'}</span>
+                          {task.agent || task.assignee}
+                        </span>
+                      )}
+                    </div>
                   </article>
                 ))}
               </div>
-            ))}
-          </div>
-        </section>
+            </div>
+          ))}
+        </div>
 
-        <section className="scene-panel">
-          <div className="scene-panel__head">
-            <span>Linked channels</span>
-            <span className="badge badge--success">2 live</span>
-          </div>
-          <div className="mini-list">
-            {['support:release', 'review:alpha', 'ops:announce'].map((item) => (
-              <div key={item} className="mini-list__row">
-                <span className="channel-dot" />
-                <span>{item}</span>
+        <div className="ps-modal-overlay">
+          <div className="ps-modal">
+            <div className="ps-modal-body">
+              <span className="ps-modal-typewriter">Integrate Slack webhook alerts</span>
+              <span className="ps-modal-desc">
+                Connect Slack incoming webhooks to project channels. Route task updates, review completions and artifact alerts as formatted messages.
+              </span>
+            </div>
+            <div className="ps-modal-toolbar">
+              <div className="ps-modal-chips">
+                <span className="ps-modal-chip">
+                  <span className="ps-status-dot" />
+                  Backlog
+                </span>
+                <span className="ps-modal-chip">
+                  <span className="material-symbols-rounded">flag</span>
+                  Medium
+                </span>
+                <span className="ps-modal-chip">
+                  <span className="material-symbols-rounded">smart_toy</span>
+                  CEO Agent
+                </span>
               </div>
-            ))}
+              <span className="ps-modal-create-btn">Create</span>
+            </div>
           </div>
-        </section>
+        </div>
 
-        <section className="scene-panel">
-          <div className="scene-panel__head">
-            <span>Emitted artifacts</span>
-            <span className="badge badge--accent">5 new</span>
-          </div>
-          <div className="artifact-list">
-            {[
-              'artifacts/release-notes.md',
-              'artifacts/search-diff.patch',
-              'workspace/logs/review-summary.txt'
-            ].map((item) => (
-              <div key={item} className="artifact-row">
-                <span className="material-symbols-rounded">description</span>
-                <span>{item}</span>
-              </div>
-            ))}
-          </div>
-        </section>
-      </div>
+        <div className="ps-cursor" aria-hidden="true">
+          <svg viewBox="0 0 16 22" width="20" height="28" fill="none">
+            <path d="M1 1v18l4.5-4.5L9 22l3-1.5L8.5 13H15L1 1z" fill="#fff" stroke="#1a1a2e" strokeWidth="1.2" strokeLinejoin="round" />
+          </svg>
+        </div>
+      </section>
     </DashboardFrame>
   )
 }
