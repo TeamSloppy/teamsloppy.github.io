@@ -7,6 +7,21 @@ import { HeroDashboardPreview } from './components/HeroDashboardPreview'
 
 const soLogo = '/so_logo.svg'
 
+const MARQUEE_WORDS = ['Runtime', 'Dashboard', 'Projects', 'Review', 'Channels', 'Agents']
+
+function MarqueeStrip({ ghost = false }: { ghost?: boolean }) {
+  const repeated = [...MARQUEE_WORDS, ...MARQUEE_WORDS, ...MARQUEE_WORDS, ...MARQUEE_WORDS]
+  return (
+    <div className={`brutal-marquee${ghost ? ' brutal-marquee--ghost' : ''}`}>
+      <div className="brutal-marquee__track">
+        {repeated.map((word, i) => (
+          <span key={i}>{word}</span>
+        ))}
+      </div>
+    </div>
+  )
+}
+
 function App() {
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -131,6 +146,8 @@ function App() {
           </div>
         </section>
 
+        <MarqueeStrip />
+
         <section className="intro-strip">
           <div className="container intro-strip__inner" data-reveal>
             <p>
@@ -150,6 +167,7 @@ function App() {
             key={section.id}
             section={section}
             align={index % 2 === 0 ? 'left' : 'right'}
+            index={index}
           />
         ))}
 
@@ -201,6 +219,8 @@ function App() {
             </div>
           </div>
         </section>
+
+        <MarqueeStrip ghost />
 
         <section className="cta-panel">
           <div className="container cta-panel__inner" data-reveal>
