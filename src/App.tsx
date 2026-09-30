@@ -1,60 +1,17 @@
-import { useEffect } from 'react'
-import './App.css'
+import { useEffect, useState } from 'react'
 import './Refresh.css'
-import { HeroDashboardPreview } from './components/HeroDashboardPreview'
-import { LandingScene } from './components/landing/LandingScenes'
+import { Sloppie, type Shape } from './components/Sloppie'
 import {
   allEditorial,
   blogPosts,
   newsPosts,
   type EditorialEntry,
-  type EditorialKind
+  type EditorialKind,
 } from './editorial'
 
-const soLogo = '/so_logo.svg'
 const docsUrl = 'https://docs.sloppy.team/'
 const installUrl = 'https://docs.sloppy.team/install'
 const githubUrl = 'https://github.com/TeamSloppy/Sloppy'
-
-const capabilities = [
-  {
-    number: '01',
-    title: 'Route work with intent',
-    description:
-      'Move requests through channels, branches, actors, and workers with declared policy instead of an opaque prompt loop.',
-    label: 'Runtime graph'
-  },
-  {
-    number: '02',
-    title: 'Keep projects operational',
-    description:
-      'Connect tasks, files, working agents, review state, and emitted artifacts around the project they belong to.',
-    label: 'Project control'
-  },
-  {
-    number: '03',
-    title: 'Review before it ships',
-    description:
-      'Inspect diffs, leave line comments, resolve context in chat, and record approve or reject decisions in one flow.',
-    label: 'Human authority'
-  },
-  {
-    number: '04',
-    title: 'See the whole system',
-    description:
-      'Follow worker state, channel traffic, bulletins, tool calls, and durable evidence from an operator-first dashboard.',
-    label: 'Live visibility'
-  }
-]
-
-const compactFeatures = [
-  ['Configurable agents', 'Compose models, tools, skills, memory, and scheduled routines.'],
-  ['Omnichannel entry', 'Bring Telegram, Discord, API, CLI, and dashboard work into one runtime.'],
-  ['Local-first core', 'Keep work close to projects with SQLite persistence and a Swift runtime.'],
-  ['Typed lifecycle', 'Drive routing, completion, and review from explicit state—not model prose.'],
-  ['Durable artifacts', 'Preserve useful outputs and completion evidence beyond a single transcript.'],
-  ['Multi-provider', 'Choose the right model per role without binding the operating layer to one vendor.']
-]
 
 function Arrow({ external = false }: { external?: boolean }) {
   return (
@@ -71,22 +28,22 @@ function SiteHeader() {
         Skip to main content
       </a>
       <div className="refresh-announcement">
-        <a href="/news/native-clients-and-project-workflows">
+        <a href="/#sloppies">
           <span>New</span>
-          Native clients, Live Activities, and richer project workflows
+          Meet your new teammates. Sloppies are here.
           <Arrow />
         </a>
       </div>
       <header className="refresh-header">
         <div className="refresh-container refresh-header__inner">
           <a href="/" className="refresh-brand" aria-label="Sloppy home">
-            <img src={soLogo} alt="" />
+            <img src="/so_logo.svg" alt="" />
             <span>Sloppy</span>
           </a>
 
           <nav className="refresh-nav" aria-label="Main navigation">
             <a href="/#product">Product</a>
-            <a href="/#workflows">Workflows</a>
+            <a href="/#sloppies">Sloppies</a>
             <a href="/blog">Blog</a>
             <a href="/news">News</a>
             <a href={docsUrl} target="_blank" rel="noreferrer">
@@ -94,8 +51,8 @@ function SiteHeader() {
             </a>
           </nav>
 
-          <a className="refresh-header__cta" href={installUrl} target="_blank" rel="noreferrer">
-            Get Sloppy
+          <a className="refresh-header__cta" href="/#download">
+            Download
             <Arrow external />
           </a>
         </div>
@@ -107,7 +64,7 @@ function SiteHeader() {
 function SectionHeading({
   eyebrow,
   title,
-  copy
+  copy,
 }: {
   eyebrow: string
   title: string
@@ -122,10 +79,19 @@ function SectionHeading({
   )
 }
 
-function EditorialCard({ entry, large = false }: { entry: EditorialEntry; large?: boolean }) {
+function EditorialCard({
+  entry,
+  large = false,
+}: {
+  entry: EditorialEntry
+  large?: boolean
+}) {
   const href = `/${entry.kind.toLowerCase()}/${entry.slug}`
   return (
-    <a className={`editorial-card${large ? ' editorial-card--large' : ''}`} href={href}>
+    <a
+      className={`editorial-card${large ? ' editorial-card--large' : ''}`}
+      href={href}
+    >
       <div className="editorial-card__meta">
         <span>{entry.tag}</span>
         <time>{entry.date}</time>
@@ -144,187 +110,334 @@ function EditorialCard({ entry, large = false }: { entry: EditorialEntry; large?
   )
 }
 
+const downloads = [
+  {
+    title: 'macOS app',
+    detail: 'macOS 26+ · Apple silicon & Intel',
+    version: 'v2.1.0',
+    label: 'Download for macOS',
+    file: 'SloppyClient-macos-2.1.0.zip',
+    tag: 'v2.1.0',
+    icon: 'desktop',
+  },
+  {
+    title: 'macOS CLI',
+    detail: 'Core, dashboard & terminal · arm64',
+    version: 'v1.3.2',
+    label: 'Download CLI',
+    file: 'Sloppy-macos-arm64.tar.gz',
+    tag: 'v1.3.2',
+    icon: 'terminal',
+  },
+  {
+    title: 'Linux',
+    detail: 'Core, dashboard & terminal · x86_64',
+    version: 'v1.3.2',
+    label: 'Download for Linux',
+    file: 'Sloppy-linux-x86_64.tar.gz',
+    tag: 'v1.3.2',
+    icon: 'terminal',
+  },
+]
+
+function DownloadIcon({ terminal = false }: { terminal?: boolean }) {
+  return (
+    <svg
+      width="22"
+      height="22"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+    >
+      <rect x="3" y="4" width="18" height="13" rx="2" />
+      {terminal ? (
+        <>
+          <path d="m7 8 3 3-3 3" />
+          <path d="M13 14h4" />
+        </>
+      ) : (
+        <>
+          <path d="M12 17v4M8 21h8" />
+          <path d="M12 7v7m-3-3 3 3 3-3" />
+        </>
+      )}
+    </svg>
+  )
+}
+
 function HomePage() {
+  const [screen, setScreen] = useState<'dashboard' | 'macos'>('dashboard')
+  const [copyStatus, setCopyStatus] = useState('Copy command')
+  async function copyCommand() {
+    try {
+      await navigator.clipboard.writeText(
+        'curl -fsSL https://sloppy.team/install.sh | bash',
+      )
+      setCopyStatus('Copied')
+    } catch {
+      setCopyStatus('Select the command to copy')
+    }
+  }
   return (
     <main id="main-content">
       <section className="refresh-hero">
-        <div className="refresh-hero__grid" aria-hidden="true" />
-        <div className="refresh-hero__glow" aria-hidden="true" />
-        <div className="refresh-container refresh-hero__inner">
-          <div className="refresh-hero__copy" data-reveal>
-            <div className="refresh-hero__kicker">
-              <span className="refresh-status-dot" />
-              Open source · Swift runtime · Local first
-            </div>
+        <div className="refresh-container hero-layout">
+          <div className="hero-copy">
+            <span className="refresh-eyebrow">
+              <span className="status-dot" /> Your open source agent workspace
+            </span>
             <h1>
-              Your agents can work.
-              <span> Now make them observable.</span>
+              Serious work.
+              <br />
+              <span>A little Sloppy.</span>
             </h1>
             <p>
-              Sloppy is the control plane for agent teams: orchestrate work, inspect every handoff,
-              review what changes, and keep humans in authority.
+              Bring your projects, tools, and AI teammates together. Build,
+              research, and review with a team you can see — and work you can
+              control.
             </p>
             <div className="refresh-hero__actions">
-              <a className="refresh-button refresh-button--primary" href={installUrl} target="_blank" rel="noreferrer">
-                Install Sloppy
-                <Arrow external />
+              <a
+                className="refresh-button refresh-button--primary"
+                href={`${githubUrl}/releases/download/v2.1.0/SloppyClient-macos-2.1.0.zip`}
+              >
+                <DownloadIcon /> Download for macOS
               </a>
-              <a className="refresh-button refresh-button--secondary" href={githubUrl} target="_blank" rel="noreferrer">
-                View on GitHub
-                <Arrow external />
+              <a className="text-link" href="#download">
+                CLI & Linux <Arrow />
               </a>
             </div>
-            <div className="refresh-hero__proof">
-              <span>Swift 6.2</span>
-              <span>React dashboard</span>
-              <span>Apple clients</span>
-              <span>Telegram + Discord</span>
+            <div className="hero-note">
+              Local first. Open source. Yours to run.
             </div>
           </div>
-
-          <div className="refresh-hero__product" data-reveal>
-            <div className="refresh-product-label">
-              <span>Live operator view</span>
-              <span>Channels · Workers · Review · Artifacts</span>
+          <div
+            className="hero-team"
+            aria-label="Meet the four geometric Sloppies"
+          >
+            {(['circle', 'triangle', 'diamond', 'square'] as Shape[]).map(
+              (shape, i) => (
+                <div className={`hero-bot hero-bot--${shape}`} key={shape}>
+                  <Sloppie shape={shape} />
+                  <span>{['Think', 'Build', 'Review', 'Explore'][i]}</span>
+                </div>
+              ),
+            )}
+            <div className="team-caption">
+              <span className="status-dot" /> Small team. Big possibilities.
             </div>
-            <HeroDashboardPreview />
           </div>
         </div>
       </section>
 
-      <section className="refresh-sequence" aria-label="How Sloppy turns requests into results">
-        <div className="refresh-container refresh-sequence__grid">
+      <section id="product" className="product-showcase refresh-container">
+        <div className="showcase-head">
+          <span>One workspace. Your whole team.</span>
+          <div
+            className="screenshot-tabs"
+            role="group"
+            aria-label="Product screenshots"
+          >
+            <button
+              aria-pressed={screen === 'dashboard'}
+              onClick={() => setScreen('dashboard')}
+            >
+              Dashboard
+            </button>
+            <button
+              aria-pressed={screen === 'macos'}
+              onClick={() => setScreen('macos')}
+            >
+              macOS app
+            </button>
+          </div>
+        </div>
+        <figure className="product-frame">
+          <div className="window-bar">
+            <span className="window-dots">
+              <i />
+              <i />
+              <i />
+            </span>
+            <span>
+              Sloppy /{' '}
+              {screen === 'dashboard' ? 'Your agent team' : 'Atlas Studio'}
+            </span>
+            <span className="demo-label">Demo workspace</span>
+          </div>
+          <a
+            href={`/promo/${screen === 'dashboard' ? 'dashboard.jpg' : 'macos.jpg'}`}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`Open full-size ${screen} screenshot`}
+          >
+            <img
+              src={`/promo/${screen === 'dashboard' ? 'dashboard.jpg' : 'macos.jpg'}`}
+              width={screen === 'dashboard' ? 1440 : 1360}
+              height={screen === 'dashboard' ? 980 : 880}
+              alt={
+                screen === 'dashboard'
+                  ? 'Real Sloppy dashboard showing a Sloppie, agent activity and run history with fictional demo data.'
+                  : 'Real native Sloppy macOS app showing the fictional Atlas Studio launch conversation.'
+              }
+              fetchPriority="high"
+            />
+          </a>
+          <figcaption>
+            Actual product screenshots. Fictional projects, conversations, and
+            activity.
+          </figcaption>
+        </figure>
+      </section>
+
+      <section className="refresh-section refresh-container">
+        <SectionHeading
+          eyebrow="A place for the whole process"
+          title="Less juggling. More doing."
+          copy="From the first idea to the final review, keep the people, agents, and context together."
+        />
+        <div className="benefit-grid">
           {[
-            ['01', 'Request enters', 'Channel context is preserved'],
-            ['02', 'Work is routed', 'Actors and policy choose the path'],
-            ['03', 'Agents execute', 'Tools, state, and artifacts stay visible'],
-            ['04', 'Humans decide', 'Review and approvals close the loop']
-          ].map(([number, title, description]) => (
-            <div key={number} className="refresh-sequence__item" data-reveal>
-              <span>{number}</span>
-              <strong>{title}</strong>
-              <p>{description}</p>
-            </div>
+            [
+              '01',
+              'A home for your projects',
+              'Keep chats, files, tasks, and artifacts close to the work they belong to. Pick up where your team left off.',
+            ],
+            [
+              '02',
+              'Teammates with a purpose',
+              'Give each agent its own models, tools, skills, and memory. Let focused teammates work together.',
+            ],
+            [
+              '03',
+              'You stay in the loop',
+              'Follow tool calls and progress, inspect changes, and review the result before taking the next step.',
+            ],
+          ].map(([n, title, copy]) => (
+            <article key={n}>
+              <span className="refresh-eyebrow">{n}</span>
+              <h3>{title}</h3>
+              <p>{copy}</p>
+            </article>
           ))}
         </div>
+        <div className="product-facts">
+          <span>Multiple model providers</span>
+          <span>Skills & MCP tools</span>
+          <span>Telegram & Discord</span>
+          <span>Native app & browser</span>
+        </div>
       </section>
 
-      <section id="product" className="refresh-section refresh-section--product">
+      <section id="sloppies" className="refresh-section sloppies-section">
         <div className="refresh-container">
           <SectionHeading
-            eyebrow="The operating layer"
-            title="From one request to an auditable result."
-            copy="Sloppy gives agent work a structure your team can understand while it is happening—not only after the final answer appears."
+            eyebrow="Meet the Sloppies"
+            title="A familiar face for every agent."
+            copy="A little personality in your workspace. Every agent gets a geometric companion, with its own shape, color, and expressions."
           />
-
-          <div className="refresh-capability-grid">
-            {capabilities.map((capability) => (
-              <article key={capability.number} className="refresh-capability" data-reveal>
-                <div className="refresh-capability__top">
-                  <span>{capability.number}</span>
-                  <span>{capability.label}</span>
-                </div>
-                <h3>{capability.title}</h3>
-                <p>{capability.description}</p>
-              </article>
-            ))}
+          <div className="sloppies-lineup">
+            {(['circle', 'triangle', 'diamond', 'square'] as Shape[]).map(
+              (shape, i) => (
+                <article key={shape}>
+                  <Sloppie shape={shape} />
+                  <span className="refresh-eyebrow">
+                    0{i + 1} / {shape}
+                  </span>
+                  <h3>
+                    {
+                      [
+                        'A fresh perspective.',
+                        'Ready to build.',
+                        'An eye for detail.',
+                        'Room for ideas.',
+                      ][i]
+                    }
+                  </h3>
+                </article>
+              ),
+            )}
           </div>
+          <p className="sloppies-footnote">
+            Same companions. Across the app, dashboard, and desktop.
+          </p>
         </div>
       </section>
 
-      <section id="workflows" className="refresh-section refresh-workflow">
-        <div className="refresh-container">
-          <div className="refresh-workflow__story">
-            <div className="refresh-workflow__copy" data-reveal>
-              <span className="refresh-eyebrow">01 / Route and delegate</span>
-              <h2>Let work branch without losing the plot.</h2>
-              <p>
-                A channel can delegate to focused workers, keep their tool use and status visible,
-                then bring structured conclusions and artifacts back to the operator.
-              </p>
-              <ul>
-                <li>Declared actor and team relationships</li>
-                <li>Inspectable worker lifecycle</li>
-                <li>Typed completion evidence</li>
-              </ul>
-            </div>
-            <div className="refresh-workflow__scene" data-reveal>
-              <LandingScene variant="runtime" />
-            </div>
-          </div>
-
-          <div className="refresh-workflow__story refresh-workflow__story--reverse">
-            <div className="refresh-workflow__copy" data-reveal>
-              <span className="refresh-eyebrow">02 / Review with context</span>
-              <h2>Keep the human decision inside the workflow.</h2>
-              <p>
-                Review generated changes beside task context and conversation. Approvals become
-                durable actions, not a vague sentence buried in chat history.
-              </p>
-              <ul>
-                <li>Diff-first review</li>
-                <li>Line comments and review chat</li>
-                <li>Explicit approve and reject state</li>
-              </ul>
-            </div>
-            <div className="refresh-workflow__scene" data-reveal>
-              <LandingScene variant="review" />
-            </div>
-          </div>
-
-          <div className="refresh-feature-grid">
-            {compactFeatures.map(([title, description], index) => (
-              <article key={title} data-reveal>
-                <span>{String(index + 1).padStart(2, '0')}</span>
-                <h3>{title}</h3>
-                <p>{description}</p>
-              </article>
-            ))}
-          </div>
+      <section
+        id="download"
+        className="refresh-section refresh-container download-section"
+      >
+        <SectionHeading
+          eyebrow="Make yourself at home"
+          title="Your next teammate is one download away."
+          copy="Choose the native macOS app, or run the core and dashboard from your terminal."
+        />
+        <div className="download-grid">
+          {downloads.map((item) => (
+            <article key={item.title}>
+              <div className="download-top">
+                <DownloadIcon terminal={item.icon === 'terminal'} />
+                <span>{item.version}</span>
+              </div>
+              <h3>{item.title}</h3>
+              <p>{item.detail}</p>
+              <a
+                className="refresh-button"
+                href={`${githubUrl}/releases/download/${item.tag}/${item.file}`}
+              >
+                {item.label}
+                <Arrow />
+              </a>
+              <a
+                className="checksum-link"
+                href={`${githubUrl}/releases/download/${item.tag}/SHA256SUMS.txt`}
+              >
+                Verify checksum <Arrow external />
+              </a>
+            </article>
+          ))}
         </div>
+        <div className="install-command">
+          <div>
+            <strong>Prefer the terminal?</strong>
+            <span>Install from source on macOS or Linux.</span>
+          </div>
+          <code>curl -fsSL https://sloppy.team/install.sh | bash</code>
+          <button onClick={copyCommand}>{copyStatus}</button>
+          <span role="status" className="sr-only">
+            {copyStatus === 'Copied'
+              ? 'Install command copied to clipboard'
+              : ''}
+          </span>
+        </div>
+        <p className="download-note">
+          CLI packages include the web dashboard.{' '}
+          <a href={installUrl} target="_blank" rel="noreferrer">
+            Installation guide <Arrow external />
+          </a>
+        </p>
       </section>
 
       <section className="refresh-section refresh-editorial">
         <div className="refresh-container">
-          <div className="refresh-editorial__head" data-reveal>
+          <div className="refresh-editorial__head">
             <div>
-              <span className="refresh-eyebrow">From the Sloppy team</span>
-              <h2>Ideas, releases, and what we are building.</h2>
+              <span className="refresh-eyebrow">From the team</span>
+              <h2>Notes from the workshop.</h2>
             </div>
-            <div className="refresh-editorial__links">
-              <a href="/blog">
-                All blog posts <Arrow />
-              </a>
-              <a href="/news">
-                All news <Arrow />
-              </a>
-            </div>
+            <a className="text-link" href="/news">
+              All updates <Arrow />
+            </a>
           </div>
-
-          <div className="refresh-editorial__grid" data-reveal>
+          <div className="refresh-editorial__grid">
             <EditorialCard entry={blogPosts[0]} large />
             <EditorialCard entry={newsPosts[0]} />
             <EditorialCard entry={blogPosts[1]} />
-          </div>
-        </div>
-      </section>
-
-      <section className="refresh-final">
-        <div className="refresh-final__grid" aria-hidden="true" />
-        <div className="refresh-container refresh-final__inner" data-reveal>
-          <img src={soLogo} alt="" />
-          <span className="refresh-eyebrow">Open source agent operations</span>
-          <h2>Run agents in a system your team can actually operate.</h2>
-          <p>Start local. Connect a provider. Give work a structure you can see and control.</p>
-          <div className="refresh-hero__actions">
-            <a className="refresh-button refresh-button--dark" href={installUrl} target="_blank" rel="noreferrer">
-              Get started
-              <Arrow external />
-            </a>
-            <a className="refresh-button refresh-button--light" href={docsUrl} target="_blank" rel="noreferrer">
-              Read the docs
-              <Arrow external />
-            </a>
           </div>
         </div>
       </section>
@@ -332,14 +445,24 @@ function HomePage() {
   )
 }
 
-function EditorialIndex({ kind, entries }: { kind: EditorialKind; entries: EditorialEntry[] }) {
+function EditorialIndex({
+  kind,
+  entries,
+}: {
+  kind: EditorialKind
+  entries: EditorialEntry[]
+}) {
   const isBlog = kind === 'Blog'
   return (
     <main id="main-content" className="editorial-index">
       <section className="editorial-index__hero">
         <div className="refresh-container" data-reveal>
           <span className="refresh-eyebrow">Sloppy {kind}</span>
-          <h1>{isBlog ? 'Thinking out loud about agent operations.' : 'What is new in Sloppy.'}</h1>
+          <h1>
+            {isBlog
+              ? 'Thinking out loud about agent operations.'
+              : 'What is new in Sloppy.'}
+          </h1>
           <p>
             {isBlog
               ? 'Architecture notes, engineering decisions, and practical lessons from building an observable agent runtime.'
@@ -406,7 +529,10 @@ function EditorialArticle({ entry }: { entry: EditorialEntry }) {
               .filter((candidate) => candidate.slug !== entry.slug)
               .slice(0, 2)
               .map((candidate) => (
-                <EditorialCard key={`${candidate.kind}-${candidate.slug}`} entry={candidate} />
+                <EditorialCard
+                  key={`${candidate.kind}-${candidate.slug}`}
+                  entry={candidate}
+                />
               ))}
           </div>
         </div>
@@ -421,7 +547,10 @@ function NotFound() {
       <div className="refresh-container">
         <span className="refresh-eyebrow">404 / Route not found</span>
         <h1>This worker has no route.</h1>
-        <p>The page may have moved, or the link points to a task that does not exist.</p>
+        <p>
+          The page may have moved, or the link points to a task that does not
+          exist.
+        </p>
         <a className="refresh-button refresh-button--primary" href="/">
           Return home <Arrow />
         </a>
@@ -436,7 +565,7 @@ function SiteFooter() {
       <div className="refresh-container refresh-footer__grid">
         <div className="refresh-footer__brand">
           <a href="/" className="refresh-brand">
-            <img src={soLogo} alt="" />
+            <img src="/so_logo.svg" alt="" />
             <span>Sloppy</span>
           </a>
           <p>Observable control plane for agent teams.</p>
@@ -446,10 +575,8 @@ function SiteFooter() {
         <div>
           <strong>Product</strong>
           <a href="/#product">Overview</a>
-          <a href="/#workflows">Workflows</a>
-          <a href={installUrl} target="_blank" rel="noreferrer">
-            Install
-          </a>
+          <a href="/#sloppies">Sloppies</a>
+          <a href="/#download">Install</a>
         </div>
         <div>
           <strong>Resources</strong>
@@ -491,7 +618,7 @@ function App() {
           }
         })
       },
-      { threshold: 0.1, rootMargin: '0px 0px -8% 0px' }
+      { threshold: 0.1, rootMargin: '0px 0px -8% 0px' },
     )
 
     document.querySelectorAll<HTMLElement>('[data-reveal]').forEach((node) => {
@@ -503,7 +630,7 @@ function App() {
 
   const path = window.location.pathname.replace(/\/+$/, '') || '/'
   let page
-  let title = 'Sloppy | Observable control plane for agent teams'
+  let title = 'Sloppy | Your open source agent workspace'
 
   if (path === '/' || path === '/index.html') {
     page = <HomePage />
@@ -515,7 +642,8 @@ function App() {
     page = <EditorialIndex kind="News" entries={newsPosts} />
   } else {
     const entry = allEditorial.find(
-      (candidate) => path === `/${candidate.kind.toLowerCase()}/${candidate.slug}`
+      (candidate) =>
+        path === `/${candidate.kind.toLowerCase()}/${candidate.slug}`,
     )
     if (entry) {
       title = `${entry.title} | Sloppy`
