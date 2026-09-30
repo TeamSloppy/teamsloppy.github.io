@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import './Refresh.css'
 import { Sloppie, type Shape } from './components/Sloppie'
+import { CapabilitiesSection } from './components/CapabilitiesSection'
 import {
   allEditorial,
   blogPosts,
@@ -333,6 +334,8 @@ function HomePage() {
         </div>
       </section>
 
+      <CapabilitiesSection />
+
       <section id="sloppies" className="refresh-section sloppies-section">
         <div className="refresh-container">
           <SectionHeading
@@ -575,6 +578,7 @@ function SiteFooter() {
         <div>
           <strong>Product</strong>
           <a href="/#product">Overview</a>
+          <a href="/#capabilities">Memory, JEV & Mesh</a>
           <a href="/#sloppies">Sloppies</a>
           <a href="/#download">Install</a>
         </div>

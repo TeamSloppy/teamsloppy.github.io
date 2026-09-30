@@ -521,6 +521,110 @@ h3 {
   border-block: 1px solid var(--line);
   background: #080808;
 }
+.capabilities-section {
+  border-top: 1px solid var(--line);
+}
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+}
+.capability-card {
+  min-width: 0;
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #0b0b0b;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  scroll-margin-top: 28px;
+}
+.capability-card h3 {
+  margin: 18px 0 16px;
+  font-size: 24px;
+}
+.capability-card > p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.capability-preview {
+  width: 100%;
+  margin: 24px 0;
+  padding: 18px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #050505;
+}
+.capability-preview small {
+  display: block;
+  margin-top: 14px;
+  color: var(--muted);
+  font-size: 11px;
+}
+.capability-memory > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted);
+  font: 10px var(--font-mono);
+}
+.capability-memory > div > span:first-child {
+  color: var(--accent);
+}
+.capability-memory p {
+  margin-top: 14px;
+  font-size: 14px;
+}
+.capability-flow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.capability-flow > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.capability-flow strong {
+  padding: 7px 10px;
+  border: 1px solid #343434;
+  border-radius: 5px;
+  font-size: 11px;
+  font-weight: 500;
+}
+.capability-flow i {
+  color: var(--muted);
+  font-style: normal;
+}
+.capability-preview--jev .capability-flow > span:nth-child(2) strong {
+  color: #c1b7ff;
+  border-color: #4f456f;
+  background: #1b1726;
+}
+.capability-card > a {
+  margin-top: auto;
+  padding-top: 22px;
+  font-size: 12px;
+  color: var(--text);
+}
+.capability-card > a:hover {
+  color: var(--accent);
+}
+@media (max-width: 768px) {
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+  .capability-card {
+    padding: 22px;
+  }
+  .capability-card h3 {
+    font-size: 22px;
+  }
+}
 .sloppies-lineup {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
