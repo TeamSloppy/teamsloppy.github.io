@@ -184,6 +184,189 @@ h1 {
   width: 180px;
   height: 180px;
 }
+.sloppie {
+  --look-x: 0.85px;
+  --gaze-delay: 0s;
+  --float-duration: 5.4s;
+  --float-delay: -0.6s;
+  --blink-delay: -1s;
+  --emotion-delay: -1.2s;
+  animation: sloppie-float var(--float-duration) ease-in-out var(--float-delay)
+    infinite;
+}
+.sloppie--triangle {
+  --look-x: -0.85px;
+  --float-duration: 6.1s;
+  --float-delay: -2.4s;
+  --blink-delay: -3.7s;
+  --emotion-delay: -6.4s;
+}
+.sloppie--diamond {
+  --gaze-delay: -4.6s;
+  --float-duration: 5.8s;
+  --float-delay: -1.8s;
+  --blink-delay: -2.5s;
+  --emotion-delay: -11.2s;
+}
+.sloppie--square {
+  --look-x: -0.85px;
+  --gaze-delay: -4.6s;
+  --float-duration: 6.5s;
+  --float-delay: -3.2s;
+  --blink-delay: -4.8s;
+  --emotion-delay: -15.8s;
+}
+.sloppie-gaze {
+  animation: sloppie-glance 10.4s ease-in-out var(--gaze-delay) infinite;
+}
+.sloppie-blink {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sloppie-blink 6.8s ease-in-out var(--blink-delay) infinite;
+}
+.sloppie-expression {
+  --thinking-scale: 1.04;
+  --thinking-tilt: 4deg;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: sloppie-expression 19s ease-in-out var(--emotion-delay) infinite;
+}
+.sloppie-expression--left {
+  --thinking-scale: 0.55;
+  --thinking-tilt: -9deg;
+}
+.sloppie-eye {
+  opacity: 1;
+  animation: sloppie-open-eye 19s ease-in-out var(--emotion-delay) infinite;
+}
+.sloppie-smile {
+  opacity: 0;
+  animation: sloppie-smile 19s ease-in-out var(--emotion-delay) infinite;
+}
+/* Freeze offscreen artwork; animate transforms and opacity, never layout or text. */
+.sloppie,
+.sloppie-gaze,
+.sloppie-blink,
+.sloppie-expression,
+.sloppie-eye,
+.sloppie-smile {
+  animation-play-state: paused;
+}
+.sloppie.is-awake,
+.sloppie.is-awake .sloppie-gaze,
+.sloppie.is-awake .sloppie-blink,
+.sloppie.is-awake .sloppie-expression,
+.sloppie.is-awake .sloppie-eye,
+.sloppie.is-awake .sloppie-smile {
+  animation-play-state: running;
+}
+@keyframes sloppie-float {
+  0%,
+  100% {
+    transform: translateY(3px);
+  }
+  50% {
+    transform: translateY(-5px);
+  }
+}
+/* Adjacent pairs share timing and look inward, then relax to center. */
+@keyframes sloppie-glance {
+  0%,
+  16%,
+  44%,
+  62%,
+  100% {
+    transform: translate(0, 0);
+  }
+  24%,
+  36% {
+    transform: translate(var(--look-x), -0.12px);
+  }
+  72%,
+  82% {
+    transform: translate(var(--look-x), 0.3px);
+  }
+}
+@keyframes sloppie-blink {
+  0%,
+  17%,
+  21%,
+  74%,
+  78%,
+  100% {
+    transform: scaleY(1);
+  }
+  19%,
+  76% {
+    transform: scaleY(0.08);
+  }
+}
+@keyframes sloppie-expression {
+  0%,
+  44%,
+  72%,
+  94%,
+  100% {
+    transform: scale(1);
+  }
+  56%,
+  66% {
+    transform: rotate(var(--thinking-tilt)) scale(1, var(--thinking-scale));
+  }
+  80%,
+  86% {
+    transform: scale(1.18);
+  }
+}
+@keyframes sloppie-open-eye {
+  0%,
+  18%,
+  34%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  32% {
+    opacity: 0;
+  }
+}
+@keyframes sloppie-smile {
+  0%,
+  18%,
+  34%,
+  100% {
+    opacity: 0;
+  }
+  20%,
+  32% {
+    opacity: 1;
+  }
+}
+@media (hover: hover) {
+  .sloppie:hover .sloppie-expression {
+    animation: none;
+    transform: none;
+  }
+  .sloppie:hover .sloppie-eye {
+    animation: none;
+    opacity: 0;
+  }
+  .sloppie:hover .sloppie-smile {
+    animation: none;
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sloppie,
+  .sloppie-gaze,
+  .sloppie-blink,
+  .sloppie-expression,
+  .sloppie-eye,
+  .sloppie-smile {
+    animation: none;
+    transform: none;
+  }
+}
 .hero-bot span {
   font: 10px var(--font-mono);
   color: var(--muted);
