@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './Refresh.css'
 import { Sloppie, type Shape } from './components/Sloppie'
 import { CapabilitiesSection } from './components/CapabilitiesSection'
+import { ConnectedWorkSection } from './components/ConnectedWorkSection'
 import {
   allEditorial,
   blogPosts,
@@ -44,6 +45,7 @@ function SiteHeader() {
 
           <nav className="refresh-nav" aria-label="Main navigation">
             <a href="/#product">Product</a>
+            <a href="/#console">Console</a>
             <a href="/#sloppies">Sloppies</a>
             <a href="/blog">Blog</a>
             <a href="/news">News</a>
@@ -336,6 +338,8 @@ function HomePage() {
 
       <CapabilitiesSection />
 
+      <ConnectedWorkSection />
+
       <section id="sloppies" className="refresh-section sloppies-section">
         <div className="refresh-container">
           <SectionHeading
@@ -579,6 +583,8 @@ function SiteFooter() {
           <strong>Product</strong>
           <a href="/#product">Overview</a>
           <a href="/#capabilities">Memory, JEV & Mesh</a>
+          <a href="/#long-chats">Long Chats</a>
+          <a href="/#console">Console</a>
           <a href="/#sloppies">Sloppies</a>
           <a href="/#download">Install</a>
         </div>

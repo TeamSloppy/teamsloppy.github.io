@@ -933,7 +933,8 @@ h3 {
   }
   .refresh-nav a:nth-child(3),
   .refresh-nav a:nth-child(4),
-  .refresh-nav a:nth-child(5) {
+  .refresh-nav a:nth-child(5),
+  .refresh-nav a:nth-child(6) {
     display: none;
   }
   .refresh-brand {
@@ -1057,5 +1058,200 @@ h3 {
   }
   .refresh-announcement {
     font-size: 10px;
+  }
+}
+
+.connected-work {
+  border-top: 1px solid var(--line);
+}
+.connected-work--console {
+  background: #080808;
+}
+.connected-work__grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: center;
+  gap: 80px;
+}
+.connected-work__copy h2 {
+  margin: 18px 0 22px;
+}
+.connected-work__copy > p {
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
+}
+.connected-work__benefits {
+  display: grid;
+  gap: 12px;
+  margin: 26px 0;
+  padding: 0;
+  list-style: none;
+  font-size: 13px;
+  color: var(--muted);
+}
+.connected-work__benefits li {
+  display: flex;
+  gap: 12px;
+}
+.connected-work__benefits li::before {
+  content: '+';
+  color: var(--accent);
+}
+.connected-work__copy > .connected-work__note {
+  margin-top: 20px;
+  font-size: 11px;
+}
+.connected-preview {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+.connected-preview__header,
+.connected-preview__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 18px 22px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.connected-preview__header {
+  border-bottom: 1px solid var(--line);
+}
+.connected-preview__header strong {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 12px;
+}
+.connected-preview__footer {
+  border-top: 1px solid var(--line);
+}
+.long-chat-message {
+  margin: 18px 22px;
+  padding: 15px 17px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: #101010;
+}
+.long-chat-message--user {
+  margin-left: 62px;
+  background: #141414;
+}
+.long-chat-message > span {
+  color: var(--accent);
+  font: 10px var(--font-mono);
+}
+.long-chat-message p {
+  margin-top: 8px;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.65;
+}
+.long-chat-tasks {
+  margin: 26px 22px 12px;
+}
+.long-chat-task {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 0;
+  border-top: 1px solid var(--line);
+}
+.long-chat-task:first-of-type {
+  margin-top: 14px;
+}
+.long-chat-task strong,
+.console-instances strong {
+  font-size: 13px;
+  font-weight: 500;
+}
+.long-chat-task p,
+.console-instances p {
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.connected-preview__badge {
+  flex-shrink: 0;
+  padding: 4px 8px;
+  border: 1px solid #343434;
+  border-radius: 4px;
+  color: var(--muted);
+  font: 10px var(--font-mono);
+}
+.connected-preview__badge--accent {
+  color: var(--accent);
+  border-color: #3c482c;
+  background: #141b0e;
+}
+.console-account {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin: 26px 22px;
+  padding: 20px;
+  border: 1px solid #3c482c;
+  border-radius: 6px;
+  background: #10140c;
+}
+.console-account .sloppie {
+  flex-shrink: 0;
+  width: 56px;
+  height: 56px;
+}
+.console-account strong {
+  display: block;
+  margin-top: 8px;
+  font-weight: 500;
+  font-size: 15px;
+}
+.console-instances {
+  margin-inline: 22px;
+}
+.console-instances > div {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  padding: 20px 0;
+  border-top: 1px solid var(--line);
+}
+.console-instances > div > span {
+  color: var(--accent);
+  font: 11px var(--font-mono);
+}
+.console-trust {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 22px 26px;
+}
+@media (max-width: 1024px) {
+  .connected-work__grid {
+    gap: 40px;
+  }
+}
+@media (max-width: 768px) {
+  .connected-work__grid {
+    grid-template-columns: 1fr;
+  }
+  .connected-preview {
+    width: 100%;
+    max-width: 580px;
+  }
+}
+@media (max-width: 400px) {
+  .console-account {
+    gap: 12px;
+    padding: 16px;
+  }
+  .console-account .sloppie {
+    width: 44px;
+    height: 44px;
   }
 }
