@@ -3,6 +3,8 @@ import './Refresh.css'
 import { Sloppie, type Shape } from './components/Sloppie'
 import { CapabilitiesSection } from './components/CapabilitiesSection'
 import { ConnectedWorkSection } from './components/ConnectedWorkSection'
+import { InstallCommand } from './components/InstallCommand'
+import { iosAppStoreUrl, macDownloadUrl, releaseUrl } from './downloads'
 import {
   allEditorial,
   blogPosts,
@@ -39,11 +41,11 @@ function SiteHeader() {
       <header className="refresh-header">
         <div className="refresh-container refresh-header__inner">
           <a href="/" className="refresh-brand" aria-label="Sloppy home">
-            <img src="/so_logo.svg" alt="" />
-            <span>Sloppy</span>
+            <span>sloppy<span className="wordmark-period">.</span></span>
           </a>
 
           <nav className="refresh-nav" aria-label="Main navigation">
+            <a href="/#install">Install</a>
             <a href="/#product">Product</a>
             <a href="/#console">Console</a>
             <a href="/#sloppies">Sloppies</a>
@@ -113,37 +115,7 @@ function EditorialCard({
   )
 }
 
-const downloads = [
-  {
-    title: 'macOS app',
-    detail: 'macOS 26+ · Apple silicon & Intel',
-    version: 'v2.1.0',
-    label: 'Download for macOS',
-    file: 'SloppyClient-macos-2.1.0.zip',
-    tag: 'v2.1.0',
-    icon: 'desktop',
-  },
-  {
-    title: 'macOS CLI',
-    detail: 'Core, dashboard & terminal · arm64',
-    version: 'v1.3.2',
-    label: 'Download CLI',
-    file: 'Sloppy-macos-arm64.tar.gz',
-    tag: 'v1.3.2',
-    icon: 'terminal',
-  },
-  {
-    title: 'Linux',
-    detail: 'Core, dashboard & terminal · x86_64',
-    version: 'v1.3.2',
-    label: 'Download for Linux',
-    file: 'Sloppy-linux-x86_64.tar.gz',
-    tag: 'v1.3.2',
-    icon: 'terminal',
-  },
-]
-
-function DownloadIcon({ terminal = false }: { terminal?: boolean }) {
+function DownloadIcon({ mobile = false }: { mobile?: boolean }) {
   return (
     <svg
       width="22"
@@ -156,14 +128,14 @@ function DownloadIcon({ terminal = false }: { terminal?: boolean }) {
       strokeLinejoin="round"
       aria-hidden="true"
     >
-      <rect x="3" y="4" width="18" height="13" rx="2" />
-      {terminal ? (
+      {mobile ? (
         <>
-          <path d="m7 8 3 3-3 3" />
-          <path d="M13 14h4" />
+          <rect x="6" y="2" width="12" height="20" rx="2" />
+          <path d="M11 18h2" />
         </>
       ) : (
         <>
+          <rect x="3" y="4" width="18" height="13" rx="2" />
           <path d="M12 17v4M8 21h8" />
           <path d="M12 7v7m-3-3 3 3 3-3" />
         </>
@@ -174,17 +146,6 @@ function DownloadIcon({ terminal = false }: { terminal?: boolean }) {
 
 function HomePage() {
   const [screen, setScreen] = useState<'dashboard' | 'macos'>('dashboard')
-  const [copyStatus, setCopyStatus] = useState('Copy command')
-  async function copyCommand() {
-    try {
-      await navigator.clipboard.writeText(
-        'curl -fsSL https://sloppy.team/install.sh | bash',
-      )
-      setCopyStatus('Copied')
-    } catch {
-      setCopyStatus('Select the command to copy')
-    }
-  }
   return (
     <main id="main-content">
       <section className="refresh-hero">
@@ -203,15 +164,16 @@ function HomePage() {
               research, and review with a team you can see — and work you can
               control.
             </p>
+            <InstallCommand />
             <div className="refresh-hero__actions">
               <a
                 className="refresh-button refresh-button--primary"
-                href={`${githubUrl}/releases/download/v2.1.0/SloppyClient-macos-2.1.0.zip`}
+                href={macDownloadUrl}
               >
                 <DownloadIcon /> Download for macOS
               </a>
-              <a className="text-link" href="#download">
-                CLI & Linux <Arrow />
+              <a className="refresh-button" href={iosAppStoreUrl}>
+                <DownloadIcon mobile /> Download for iOS <Arrow external />
               </a>
             </div>
             <div className="hero-note">
@@ -380,50 +342,43 @@ function HomePage() {
         className="refresh-section refresh-container download-section"
       >
         <SectionHeading
-          eyebrow="Make yourself at home"
-          title="Your next teammate is one download away."
-          copy="Choose the native macOS app, or run the core and dashboard from your terminal."
+          eyebrow="Prefer an app?"
+          title="Your workspace. On your devices."
+          copy="Download Sloppy for your Mac, or take your workspace with you on iPhone and iPad."
         />
         <div className="download-grid">
-          {downloads.map((item) => (
-            <article key={item.title}>
-              <div className="download-top">
-                <DownloadIcon terminal={item.icon === 'terminal'} />
-                <span>{item.version}</span>
-              </div>
-              <h3>{item.title}</h3>
-              <p>{item.detail}</p>
-              <a
-                className="refresh-button"
-                href={`${githubUrl}/releases/download/${item.tag}/${item.file}`}
-              >
-                {item.label}
-                <Arrow />
-              </a>
-              <a
-                className="checksum-link"
-                href={`${githubUrl}/releases/download/${item.tag}/SHA256SUMS.txt`}
-              >
-                Verify checksum <Arrow external />
-              </a>
-            </article>
-          ))}
-        </div>
-        <div className="install-command">
-          <div>
-            <strong>Prefer the terminal?</strong>
-            <span>Install from source on macOS or Linux.</span>
-          </div>
-          <code>curl -fsSL https://sloppy.team/install.sh | bash</code>
-          <button onClick={copyCommand}>{copyStatus}</button>
-          <span role="status" className="sr-only">
-            {copyStatus === 'Copied'
-              ? 'Install command copied to clipboard'
-              : ''}
-          </span>
+          <article>
+            <div className="download-top">
+              <DownloadIcon />
+              <span>v2.5.0</span>
+            </div>
+            <h3>Sloppy for macOS</h3>
+            <p>macOS 26+ · Apple silicon & Intel · Signed & notarized DMG</p>
+            <a
+              className="refresh-button"
+              href={macDownloadUrl}
+            >
+              Download for macOS
+              <Arrow />
+            </a>
+            <a
+              className="checksum-link"
+              href={`${releaseUrl}/download/v2.5.1/SHA256SUMS.txt`}
+            >
+              Verify checksum <Arrow external />
+            </a>
+          </article>
+          <article>
+            <div className="download-top"><DownloadIcon mobile /><span>iPhone & iPad</span></div>
+            <h3>Sloppy for iOS</h3>
+            <p>Your agents, projects, and conversations on the go.</p>
+            <a className="refresh-button" href={iosAppStoreUrl}>
+              Download on the App Store <Arrow external />
+            </a>
+          </article>
         </div>
         <p className="download-note">
-          CLI packages include the web dashboard.{' '}
+          <a href="#install">Install the CLI</a> on macOS, Windows, or Linux.{' '}
           <a href={installUrl} target="_blank" rel="noreferrer">
             Installation guide <Arrow external />
           </a>
@@ -572,8 +527,7 @@ function SiteFooter() {
       <div className="refresh-container refresh-footer__grid">
         <div className="refresh-footer__brand">
           <a href="/" className="refresh-brand">
-            <img src="/so_logo.svg" alt="" />
-            <span>Sloppy</span>
+            <span>sloppy<span className="wordmark-period">.</span></span>
           </a>
           <p>Observable control plane for agent teams.</p>
           <span>Built in Swift. Operated by humans.</span>
@@ -586,7 +540,7 @@ function SiteFooter() {
           <a href="/#long-chats">Long Chats</a>
           <a href="/#console">Console</a>
           <a href="/#sloppies">Sloppies</a>
-          <a href="/#download">Install</a>
+          <a href="/#install">Install</a>
         </div>
         <div>
           <strong>Resources</strong>

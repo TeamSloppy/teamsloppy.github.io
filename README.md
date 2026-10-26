@@ -93,10 +93,26 @@ surfaces, `#292929` borders, system sans typography, and no CSS gradients.
 same color matrix and eye geometry as the Dashboard. Original artwork shading
 is retained.
 
-Download links are verified release assets: native macOS v2.1.0 (macOS 26+,
-universal), macOS arm64 CLI and Linux x86_64 v1.3.2. Update the explicit tags and
-filenames in `src/App.tsx` when new binaries are published. Do not assume the
-latest native release also contains CLI packages.
+The first screen prioritizes installation: OS detection, macOS/Windows/Linux switches,
+one copy button, then native macOS and iOS downloads. The macOS link is the verified
+v2.5.0 universal, Developer ID signed and notarized `.dmg` in release v2.5.1; the iOS App Store ID is `6811777701` (the public page returned
+404 during verification on 2026-10-26, so App Store publication is still required).
+Update release URLs centrally in `src/downloads.ts`.
+
+`public/install.sh` downloads `install.sh` from the latest published GitHub Release and selects
+prebuilt release installation. Publish the verified v2.5.1 release assets before deploying
+this website. Source builds remain available with `--bundle` or `--server-only`.
+`public/install.ps1` is an exact copy of `Sloppy/scripts/bootstrap-windows.ps1`;
+keep those two files in sync when changing Windows bootstrap behavior. It downloads
+`Sloppy-windows-x86_64.zip`, verifies SHA-256, and installs CLI, Dashboard and runtime
+DLLs. It never installs developer tools by default. Source builds require `-FromSource`.
+Publish a full Windows release through the updated core release workflow before
+publishing this website; v2.5.0 only contains the standalone Windows node and is not
+sufficient for the new Windows install command.
+
+The installation panel and app-download section use the approved Sloppy paper,
+forest, ink, and mint palette. Header and footer preserve the `sloppy.` wordmark.
+Other existing sections retain their current styling.
 
 ### Safe promotional captures
 

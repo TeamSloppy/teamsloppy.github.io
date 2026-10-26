@@ -50,9 +50,12 @@
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  font-size: 21px;
-  font-weight: 680;
-  letter-spacing: -0.04em;
+  font-size: 29px;
+  font-weight: 750;
+  letter-spacing: -1.2px;
+}
+.wordmark-period {
+  color: #c8e2ae;
 }
 .refresh-brand img {
   width: 28px;
@@ -106,7 +109,7 @@
 }
 .hero-layout {
   display: grid;
-  grid-template-columns: 1.15fr 1fr;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
   align-items: center;
   gap: 60px;
 }
@@ -131,8 +134,9 @@ h1 {
 .refresh-hero__actions {
   display: flex;
   align-items: center;
-  gap: 24px;
-  margin-top: 30px;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-top: 24px;
 }
 .refresh-button {
   display: inline-flex;
@@ -648,90 +652,100 @@ h3 {
   color: var(--muted);
   margin-top: 36px;
 }
+.quick-install {
+  margin-top: 28px;
+  padding: 20px;
+  background: #f5f2e9;
+  color: #242521;
+  text-align: left;
+  scroll-margin-top: 24px;
+}
+.quick-install__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.quick-install__header strong { font-size: 14px; }
+.quick-install__platforms { display: flex; gap: 4px; }
+.quick-install button {
+  min-height: 40px;
+  padding: 8px 10px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  color: #242521;
+  font: inherit;
+  font-size: 12px;
+  cursor: pointer;
+}
+.quick-install__platforms button[aria-pressed='true'] {
+  background: #20261e;
+  color: #f5f2e9;
+}
+.quick-install button:hover { border-color: #20261e; }
+.quick-install button:focus-visible,
+.quick-install a:focus-visible,
+.download-section a:focus-visible {
+  outline: 2px solid #d94e34;
+  outline-offset: 3px;
+}
+.quick-install__command {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-block: 16px;
+  margin-top: 12px;
+  border-block: 1px solid #c7c6b9;
+}
+.quick-install__command > code {
+  flex: 1;
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font: 12px/1.8 var(--font-mono);
+  user-select: all;
+}
+.quick-install__command button {
+  background: #c8e2ae;
+  font-weight: 600;
+}
+.quick-install > p { margin-top: 12px; font-size: 12px; line-height: 1.6; }
+.quick-install__next {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-top: 12px;
+  font-size: 12px;
+}
+.quick-install__next code { font-family: var(--font-mono); }
+.quick-install__next a { text-decoration: underline; text-underline-offset: 3px; }
+.download-section {
+  padding: 48px;
+  margin-bottom: 64px;
+  background: #f5f2e9;
+  color: #242521;
+}
+.download-section .refresh-eyebrow,
+.download-section .refresh-section-heading p { color: #50574c; }
+.download-section .refresh-eyebrow { font-family: inherit; }
 .download-grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 40px;
 }
-.download-grid article {
-  padding: 25px;
-  background: #0b0b0b;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-}
-.download-top {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-}
-.download-top span {
-  font: 11px var(--font-mono);
-}
-.download-grid h3 {
-  margin: 25px 0 10px;
-}
-.download-grid p {
-  font-size: 12px;
-  color: var(--muted);
-  margin-bottom: 26px;
-}
-.download-grid .refresh-button {
-  width: 100%;
-}
-.checksum-link {
-  display: block;
-  text-align: center;
-  font-size: 11px;
-  color: var(--muted);
-  margin-top: 14px;
-}
-.install-command {
-  border-block: 1px solid var(--line);
-  padding: 24px 0;
-  margin-top: 32px;
-  display: flex;
-  align-items: center;
-  gap: 18px;
-}
-.install-command > div {
-  flex: 1;
-}
-.install-command strong {
-  font-size: 13px;
-  display: block;
-}
-.install-command div span {
-  font-size: 11px;
-  color: var(--muted);
-}
-.install-command code {
-  background: #111;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 12px;
-  font: 11px var(--font-mono);
-  overflow-wrap: anywhere;
-}
-.install-command button {
-  background: #141414;
-  border: 1px solid #3b3b3b;
-  border-radius: 6px;
-  padding: 10px 12px;
-  font-size: 11px;
-}
-.install-command button:hover {
-  background: #242424;
-}
-.download-note {
-  font-size: 12px;
-  color: var(--muted);
-  margin-top: 17px;
-}
-.download-note a {
-  color: var(--text);
-  text-decoration: underline;
-  text-underline-offset: 4px;
-}
+.download-grid article { padding-top: 24px; border-top: 1px solid #c7c6b9; }
+.download-top { display: flex; justify-content: space-between; color: #50574c; }
+.download-top span { font-size: 12px; }
+.download-grid h3 { margin: 24px 0 10px; }
+.download-grid p { font-size: 14px; color: #50574c; margin-bottom: 24px; }
+.download-grid .refresh-button { background: #20261e; color: #f5f2e9; border-color: #20261e; }
+.download-grid .refresh-button:hover { background: #374332; }
+.checksum-link { display: block; font-size: 12px; margin-top: 16px; color: #50574c; text-decoration: underline; }
+.download-section .checksum-link:hover { color: #242521; }
+.download-note { font-size: 13px; color: #50574c; margin-top: 32px; }
+.download-note a { color: #242521; text-decoration: underline; text-underline-offset: 4px; }
 .refresh-editorial {
   border-top: 1px solid var(--line);
 }
@@ -907,12 +921,6 @@ h3 {
   .hero-team {
     padding: 0;
   }
-  .install-command {
-    flex-wrap: wrap;
-  }
-  .install-command > div {
-    flex-basis: 100%;
-  }
   .refresh-editorial__grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -993,13 +1001,6 @@ h3 {
   }
   .download-grid h3 {
     margin-top: 16px;
-  }
-  .install-command {
-    gap: 12px;
-  }
-  .install-command code {
-    max-width: 100%;
-    width: 100%;
   }
   .refresh-editorial__grid {
     grid-template-columns: 1fr;
@@ -1254,4 +1255,10 @@ h3 {
     width: 44px;
     height: 44px;
   }
+}
+
+@media (max-width: 700px) {
+  .download-section { padding: 28px 24px; }
+  .download-grid { grid-template-columns: minmax(0, 1fr); gap: 32px; }
+  .quick-install { padding: 16px; }
 }
