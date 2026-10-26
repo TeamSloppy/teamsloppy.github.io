@@ -43,12 +43,38 @@ if (
     .evaluate((e) => e.complete && e.naturalWidth > 0))
 )
   errors.push('Native image missing')
-await page.getByRole('button', { name: 'Copy command' }).click()
+await page.getByRole('button', { name: 'Copy install command' }).click()
 if (
   (await page.evaluate(() => navigator.clipboard.readText())) !==
   'curl -fsSL https://sloppy.team/install.sh | bash'
 )
   errors.push('Clipboard mismatch')
+// Each platform must copy its own command and reset the old success state.
+for (const [platform, command] of [
+  ['Windows', 'irm https://sloppy.team/install.ps1 | iex'],
+  ['macOS', 'curl -fsSL https://sloppy.team/install.sh | bash'],
+  ['Linux', 'curl -fsSL https://sloppy.team/install.sh | bash'],
+]) {
+  const picker = page.getByRole('group', { name: 'Operating system' })
+  await picker.getByRole('button', { name: platform, exact: true }).click()
+  const copy = page.getByRole('button', { name: 'Copy install command' })
+  if ((await copy.innerText()) !== 'Copy command') errors.push(`Stale copy status: ${platform}`)
+  await copy.click()
+  if ((await page.evaluate(() => navigator.clipboard.readText())) !== command)
+    errors.push(`Clipboard mismatch: ${platform}`)
+}
+for (const [label, href] of [
+  ['Download for macOS', 'https://github.com/TeamSloppy/Sloppy/releases/download/v2.5.1/Sloppy-macos-universal-2.5.0.dmg'],
+  ['Download on the App Store', 'https://apps.apple.com/app/id6811777701'],
+]) {
+  if ((await page.getByRole('link', { name: label, exact: true }).first().getAttribute('href')) !== href)
+    errors.push(`Wrong download destination: ${label}`)
+}
+// The public entry points must serve scripts rather than the SPA fallback.
+for (const [path, marker] of [['/install.sh', '#!/usr/bin/env bash'], ['/install.ps1', '#Requires -Version 5.1']]) {
+  const response = await page.request.get(`http://127.0.0.1:5190${path}`)
+  if (!response.ok() || !(await response.text()).startsWith(marker)) errors.push(`Missing installer: ${path}`)
+}
 for (const route of [
   '/blog',
   '/news',

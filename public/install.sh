@@ -1,3 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-curl -fsSL https://raw.githubusercontent.com/TeamSloppy/Sloppy/main/scripts/install.sh | bash -s -- "$@"
+installer="$(mktemp)"
+trap 'rm -f "$installer"' EXIT
+curl -fsSL https://github.com/TeamSloppy/Sloppy/releases/latest/download/install.sh -o "$installer"
+bash "$installer" --release "$@"
