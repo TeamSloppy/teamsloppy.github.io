@@ -39,7 +39,7 @@ await page.getByRole('button', { name: 'macOS app', exact: true }).click()
 await page.waitForTimeout(200)
 if (
   !(await page
-    .locator('img[src="/promo/macos.jpg"]')
+    .locator('img[src="/promo/macos.png"]')
     .evaluate((e) => e.complete && e.naturalWidth > 0))
 )
   errors.push('Native image missing')

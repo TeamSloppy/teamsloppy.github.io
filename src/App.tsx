@@ -230,31 +230,32 @@ function HomePage() {
             </span>
             <span>
               Sloppy /{' '}
-              {screen === 'dashboard' ? 'Your agent team' : 'Atlas Studio'}
+              {screen === 'dashboard' ? 'Your agent team' : 'macOS app'}
             </span>
             <span className="demo-label">Demo workspace</span>
           </div>
           <a
-            href={`/promo/${screen === 'dashboard' ? 'dashboard.jpg' : 'macos.jpg'}`}
+            href={`/promo/${screen === 'dashboard' ? 'dashboard.jpg' : 'macos.png'}`}
             target="_blank"
             rel="noreferrer"
             aria-label={`Open full-size ${screen} screenshot`}
           >
             <img
-              src={`/promo/${screen === 'dashboard' ? 'dashboard.jpg' : 'macos.jpg'}`}
-              width={screen === 'dashboard' ? 1440 : 1360}
-              height={screen === 'dashboard' ? 980 : 880}
+              src={`/promo/${screen === 'dashboard' ? 'dashboard.jpg' : 'macos.png'}`}
+              width={screen === 'dashboard' ? 1440 : 2400}
+              height={screen === 'dashboard' ? 980 : 1560}
               alt={
                 screen === 'dashboard'
                   ? 'Real Sloppy dashboard showing a Sloppie, agent activity and run history with fictional demo data.'
-                  : 'Real native Sloppy macOS app showing the fictional Atlas Studio launch conversation.'
+                  : 'Sloppy macOS client showing project chats, a new chat screen, workspace context, and the message composer.'
               }
               fetchPriority="high"
             />
           </a>
           <figcaption>
-            Actual product screenshots. Fictional projects, conversations, and
-            activity.
+            {screen === 'dashboard'
+              ? 'Actual product screenshot. Fictional projects, conversations, and activity.'
+              : 'Actual Sloppy macOS client.'}
           </figcaption>
         </figure>
       </section>

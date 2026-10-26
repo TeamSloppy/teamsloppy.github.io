@@ -655,8 +655,10 @@ h3 {
 .quick-install {
   margin-top: 28px;
   padding: 20px;
-  background: #f5f2e9;
-  color: #242521;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: #f5f2e9;
   text-align: left;
   scroll-margin-top: 24px;
 }
@@ -667,7 +669,7 @@ h3 {
   justify-content: space-between;
   gap: 12px;
 }
-.quick-install__header strong { font-size: 14px; }
+.quick-install__header strong { font-size: 14px; font-weight: 500; }
 .quick-install__platforms { display: flex; gap: 4px; }
 .quick-install button {
   min-height: 40px;
@@ -675,18 +677,26 @@ h3 {
   background: transparent;
   border: 1px solid transparent;
   border-radius: 4px;
-  color: #242521;
+  color: var(--muted);
   font: inherit;
   font-size: 12px;
   cursor: pointer;
 }
 .quick-install__platforms button[aria-pressed='true'] {
-  background: #20261e;
+  background: #242521;
+  border-color: #3c4038;
   color: #f5f2e9;
 }
-.quick-install button:hover { border-color: #20261e; }
+.quick-install button:hover {
+  background: #20261e;
+  border-color: #52604a;
+  color: #f5f2e9;
+}
 .quick-install button:focus-visible,
-.quick-install a:focus-visible,
+.quick-install a:focus-visible {
+  outline: 2px solid #c8e2ae;
+  outline-offset: 3px;
+}
 .download-section a:focus-visible {
   outline: 2px solid #d94e34;
   outline-offset: 3px;
@@ -698,7 +708,7 @@ h3 {
   gap: 12px;
   padding-block: 16px;
   margin-top: 12px;
-  border-block: 1px solid #c7c6b9;
+  border-block: 1px solid var(--line);
 }
 .quick-install__command > code {
   flex: 1;
@@ -708,19 +718,23 @@ h3 {
   user-select: all;
 }
 .quick-install__command button {
-  background: #c8e2ae;
+  background: #20261e;
+  border-color: #3c4038;
+  color: #c8e2ae;
   font-weight: 600;
 }
-.quick-install > p { margin-top: 12px; font-size: 12px; line-height: 1.6; }
+.quick-install > p { margin-top: 12px; color: var(--muted); font-size: 12px; line-height: 1.6; }
 .quick-install__next {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 16px;
   margin-top: 12px;
+  color: var(--muted);
   font-size: 12px;
 }
 .quick-install__next code { font-family: var(--font-mono); }
 .quick-install__next a { text-decoration: underline; text-underline-offset: 3px; }
+.quick-install__next a:hover { color: #f5f2e9; }
 .download-section {
   padding: 48px;
   margin-bottom: 64px;
